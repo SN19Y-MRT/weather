@@ -28,7 +28,7 @@ class WeatherController extends Controller
 
         $weather = $response->getBody();
         $posts = json_decode($weather, true);
-        return view('weather.index', ['posts' => $posts]);
+        return view('index', ['posts' => $posts]);
     }
 
 }
