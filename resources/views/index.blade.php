@@ -1,44 +1,56 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>週間天気予報</title>
-</head>
-<body>
-<script>
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=34.686320&longitude=135.520022&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo';
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+      <meta charset="utf-8">
+      <title>週間天気予報</title>
+      <!-- Fonts -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+      
+     
+    </head>
 
+    <body>
+      <!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+      <meta charset="utf-8">
+      <title>週間天気予報</title>
+      <!-- Fonts -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    </head>
 
-    fetch(url)
-    .then(data => data.json())
-    .then(json => console.log(json))
-    
-    window.addEventListener('load', function() {
-  getTrainList();
-});
-
-function getTrainList() {
-  var url = 'https://tetsudo.rti-giken.jp/free/delay.json'; //遅延情報のJSON
-  fetch(url)
-  .then(function (data) {
-    return data.json(); // 読み込むデータをJSONに設定
-  })
-  .then(function (json) {
-    for (var i = 0; i < json.length; i++) {
-      var train = json[i].name;
-      var company = json[i].company;
-
-      //表形式で遅延路線を表示する
-      var row = document.getElementById('train-list').insertRow();
-      row.insertCell().textContent = i + 1;
-      row.insertCell().textContent = train;
-      row.insertCell().textContent = company;
-    }
-  });
-}
-</script>
-<h1>遅延路線</h1>
-      <table id="train-list">
+    <body>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>大阪</th>
+            <th scope="col">日付</th>
+            <th scope="col">天気</th>
+            <th scope="col">最高気温</th>
+            <th scope="col">最低気温</th>
+          </tr>
+        </thead>
+        
+        
+        
+        @foreach($data as $datas)
+        <tbody>
+          <tr>
+            <td></td>
+            <td>{{ $datas['time'] }}</td>
+            <td>{{ $datas['weathercode'] }}</td>
+            <td>{{ $datas['temperature_2m_max'] }}</td>
+            <td>{{ $datas['temperature_2m_min'] }}</td>
+          </tr>
+        </tbody>
+        @endforeach
       </table>
-</body>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+    </body>
+</html>
+
+    </body>
 </html>

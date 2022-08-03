@@ -17,10 +17,21 @@ class WeatherController extends Controller
     public function index()
     {
         
-
-        $url = "https://api.open-meteo.com/v1/forecast?latitude=34.686320&longitude=135.520022&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo";
+        //{ time: "2022-08-02", code: 80.0, temperature_max: 30, temperature_min: 25 },
+        //{ time: "2022-08-03", code: 80.0, temperature_max: 30, temperature_min: 25 },
+        
+        $city = Weather::where('id',1)->first();
+        
+        ($city->latitude);
+        ($city->longitude);
+        
+        $latitude = $city->latitude;
+        $longitude = $city->longitude;
+        
+        //$url = "https://api.open-meteo.com/v1/forecast?latitude=34.686320&longitude=135.520022&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo";
+        $url = "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo";
         $method = "GET";
-
+        
         //接続
         $client = new Client();
 
@@ -28,7 +39,17 @@ class WeatherController extends Controller
 
         $weather = $response->getBody();
         $posts = json_decode($weather, true);
-        return view('index', ['posts' => $posts]);
+        
+        $data = [];
+        for($i = 0; $i <= 6; $i++) {
+            $data[] = [
+                'time'=>$posts['daily']['time'][$i],
+                'weathercode'=>$posts['daily']['weathercode'][$i],
+                'temperature_2m_max'=>$posts['daily']['temperature_2m_max'][$i],
+                'temperature_2m_min'=>$posts['daily']['temperature_2m_min'][$i],
+            ];
+        }
+        
+        return view('index', ['data' => $data]);
     }
-
 }
