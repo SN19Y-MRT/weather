@@ -23,4 +23,3 @@ Route::get('/welcome', function () {
 //});
 
 Route::get('/', [WeatherController::class, 'index']);
-

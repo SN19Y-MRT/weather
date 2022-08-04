@@ -12,7 +12,9 @@
       <table class="table">
         <thead>
           <tr>
-            <th>大阪</th>
+            <th>
+              {{ $cityname }}
+            </th>
             <th scope="col">日付</th>
             <th scope="col">天気</th>
             <th scope="col">最高気温</th>
@@ -20,13 +22,13 @@
           </tr>
         </thead>
         <tbody>
-        @foreach($data as $datas)
+        @foreach($weathers as $weather)
           <tr>
             <td></td>
-            <td>{{ $datas['time'] }}</td>
-            <td>{{ $datas['weathername'] }}</td>
-            <td>{{ $datas['temperature_2m_max'] }}</td>
-            <td>{{ $datas['temperature_2m_min'] }}</td>
+            <td>{{ $weather['time'] }}{{ $weather['week'] }}</td>
+            <td>{{ $weather['weathername'] }}</td>
+            <td>{{ $weather['temperature_2m_max'] }}{{ $units['temperature_2m_max_'] }}</td>
+            <td>{{ $weather['temperature_2m_min'] }}{{ $units['temperature_2m_min_'] }}</td>
           </tr>
         @endforeach
         </tbody>

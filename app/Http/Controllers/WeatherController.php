@@ -16,9 +16,10 @@ class WeatherController extends Controller
     */
     public function index()
     {
-        
         //{ time: "2022-08-02", code: 80.0, temperature_max: 30, temperature_min: 25 },
         //{ time: "2022-08-03", code: 80.0, temperature_max: 30, temperature_min: 25 },
+        
+        
         
         $city = Weather::where('id',1)->first();
         
@@ -39,20 +40,26 @@ class WeatherController extends Controller
 
         $weather = $response->getBody();
         $posts = json_decode($weather, true);
-        $data = [];
         
+        $units = [
+            'temperature_2m_max_'=>$posts['daily_units']['temperature_2m_max'],
+            'temperature_2m_min_'=>$posts['daily_units']['temperature_2m_min'],
+        ];
+        $weathers = [];
         for($i = 0; $i <= 6; $i++) {
             $weathercode = $posts['daily']['weathercode'][$i];
-            $data[] = [
-                'time'=>$posts['daily']['time'][$i],
+            $time = $posts['daily']['time'][$i];
+            $weathers[] = [
+                'time'=>$time,
+                'week'=>self::week[date("w", strtotime($time))],
                 'weathername'=>$this->weathername($weathercode),
                 'temperature_2m_max'=>$posts['daily']['temperature_2m_max'][$i],
                 'temperature_2m_min'=>$posts['daily']['temperature_2m_min'][$i],
             ];
         }
+        $cityname = $city->name;
         
-        
-        return view('index', ['data' => $data]);
+        return view('index', compact('weathers','cityname','units'));
     }
     
     public function weathername($weathercode)
@@ -91,4 +98,7 @@ class WeatherController extends Controller
                 return '雷雨';    
             }
     }
+    
+    const week = array( "(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)" );
+
 }
