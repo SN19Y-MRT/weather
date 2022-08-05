@@ -9,6 +9,7 @@
     </head>
   
     <body>
+      
       <table class="table">
         <thead>
           <tr>
@@ -23,13 +24,13 @@
         </thead>
         <tbody>
         @foreach($weathers as $weather)
-          <tr>
-            <td></td>
-            <td>{{ $weather['time'] }}{{ $weather['week'] }}</td>
-            <td>{{ $weather['weathername'] }}</td>
-            <td>{{ $weather['temperature_2m_max'] }}{{ $units['temperature_2m_max_'] }}</td>
-            <td>{{ $weather['temperature_2m_min'] }}{{ $units['temperature_2m_min_'] }}</td>
-          </tr>
+            <tr>
+              <td></td>
+              <td>{{ $weather['time'] }}{{ $weather['week'] }}</td>
+              <td>{{ $weather['weathername'] }}</td>
+              <td>{{ $weather['temperature_2m_max'] }}{{ $units['temperature_2m_max_'] }}</td>
+              <td>{{ $weather['temperature_2m_min'] }}{{ $units['temperature_2m_min_'] }}</td>
+            </tr>
         @endforeach
         </tbody>
       </table>

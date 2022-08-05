@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Weather;
 use GuzzleHttp\Client;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class WeatherController extends Controller
 {
@@ -39,22 +40,22 @@ class WeatherController extends Controller
         $response = $client->request($method, $url);
 
         $weather = $response->getBody();
-        $posts = json_decode($weather, true);
+        $weatherdata = json_decode($weather, true);
         
         $units = [
-            'temperature_2m_max_'=>$posts['daily_units']['temperature_2m_max'],
-            'temperature_2m_min_'=>$posts['daily_units']['temperature_2m_min'],
+            'temperature_2m_max_'=>$weatherdata['daily_units']['temperature_2m_max'],
+            'temperature_2m_min_'=>$weatherdata['daily_units']['temperature_2m_min'],
         ];
         $weathers = [];
         for($i = 0; $i <= 6; $i++) {
-            $weathercode = $posts['daily']['weathercode'][$i];
-            $time = $posts['daily']['time'][$i];
+            $weathercode = $weatherdata['daily']['weathercode'][$i];
+            $time = $weatherdata['daily']['time'][$i];
             $weathers[] = [
                 'time'=>$time,
                 'week'=>self::week[date("w", strtotime($time))],
                 'weathername'=>$this->weathername($weathercode),
-                'temperature_2m_max'=>$posts['daily']['temperature_2m_max'][$i],
-                'temperature_2m_min'=>$posts['daily']['temperature_2m_min'][$i],
+                'temperature_2m_max'=>$weatherdata['daily']['temperature_2m_max'][$i],
+                'temperature_2m_min'=>$weatherdata['daily']['temperature_2m_min'][$i],
             ];
         }
         $cityname = $city->name;
@@ -65,40 +66,41 @@ class WeatherController extends Controller
     public function weathername($weathercode)
     {
             if($weathercode == 0){
-                return '快晴';
+                return '☀：快晴';
             }
             if($weathercode == 1){
-                return '晴れ';
+                return '☀：晴れ';
             }
             if($weathercode == 2){
-                return '一部雲';
+                return '⛅：一部雲';
             }
             if($weathercode == 3){
-                return '曇り';
+                return '☁：曇り';
             }
             if($weathercode <= 49){
-                return '霧';
+                return '🌫：霧';
             }
             if($weathercode <= 59){
-                return '霧雨';
+                return '🌫☔：霧雨';
             }
             if($weathercode <= 69){
-                return '雨';
+                return '☔：雨';
             }
             if($weathercode <= 79){
-                return '雪';
+                return '☃：雪';
             }
             if($weathercode <= 84){
-                return 'にわか雨';
+                return '🌧：にわか雨';
             }
             if($weathercode <= 94){
-                return '雪・雹';
+                return '☃：雪・雹';
             }
             if($weathercode <= 99){
-                return '雷雨';    
+                return '⛈：雷雨';    
             }
     }
     
     const week = array( "(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)" );
-
+    
+    
 }
