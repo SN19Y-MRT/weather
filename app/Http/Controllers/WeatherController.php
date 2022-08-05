@@ -66,37 +66,37 @@ class WeatherController extends Controller
     public function weathername($weathercode)
     {
             if($weathercode == 0){
-                return '☀：快晴';
+                return '☀';
             }
             if($weathercode == 1){
-                return '☀：晴れ';
+                return '☀';
             }
             if($weathercode == 2){
-                return '⛅：一部雲';
+                return '⛅';
             }
             if($weathercode == 3){
-                return '☁：曇り';
+                return '☁';
             }
             if($weathercode <= 49){
-                return '🌫：霧';
+                return '🌫';
             }
             if($weathercode <= 59){
-                return '🌫☔：霧雨';
+                return '🌫☔';
             }
             if($weathercode <= 69){
-                return '☔：雨';
+                return '☔';
             }
             if($weathercode <= 79){
-                return '☃：雪';
+                return '☃';
             }
             if($weathercode <= 84){
-                return '🌧：にわか雨';
+                return '🌧';
             }
             if($weathercode <= 94){
-                return '☃：雪・雹';
+                return '☃';
             }
             if($weathercode <= 99){
-                return '⛈：雷雨';    
+                return '⛈';    
             }
     }
     
