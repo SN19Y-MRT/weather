@@ -27,6 +27,7 @@ class WeatherController extends Controller
         ($city->latitude);
         ($city->longitude);
         
+        
         $latitude = $city->latitude;
         $longitude = $city->longitude;
         
@@ -102,5 +103,48 @@ class WeatherController extends Controller
     
     const week = array( "(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)" );
     
-    
+    public function location($cityid)
+    {
+        
+        $city = Weather::where('id',$cityid)->first();
+        
+        ($city->latitude);
+        ($city->longitude);
+        
+        
+        $latitude = $city->latitude;
+        $longitude = $city->longitude;
+        
+        //$url = "https://api.open-meteo.com/v1/forecast?latitude=34.686320&longitude=135.520022&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo";
+        $url = "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTokyo";
+        $method = "GET";
+        
+        //接続
+        $client = new Client();
+
+        $response = $client->request($method, $url);
+
+        $weather = $response->getBody();
+        $weatherdata = json_decode($weather, true);
+        
+        $units = [
+            'temperature_2m_max_'=>$weatherdata['daily_units']['temperature_2m_max'],
+            'temperature_2m_min_'=>$weatherdata['daily_units']['temperature_2m_min'],
+        ];
+        $weathers = [];
+        for($i = 0; $i <= 6; $i++) {
+            $weathercode = $weatherdata['daily']['weathercode'][$i];
+            $time = $weatherdata['daily']['time'][$i];
+            $weathers[] = [
+                'time'=>$time,
+                'week'=>self::week[date("w", strtotime($time))],
+                'weathername'=>$this->weathername($weathercode),
+                'temperature_2m_max'=>$weatherdata['daily']['temperature_2m_max'][$i],
+                'temperature_2m_min'=>$weatherdata['daily']['temperature_2m_min'][$i],
+            ];
+        }
+        $cityname = $city->name;
+        
+        return view('index', compact('weathers','cityname','units'));
+    }
 }

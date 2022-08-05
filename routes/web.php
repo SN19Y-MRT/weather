@@ -18,8 +18,9 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-//Route::get('/weather', function () {
-//    return view('welcome');
-//});
+Route::get('/location', function () {
+    return view('welcome');
+});
 
 Route::get('/', [WeatherController::class, 'index']);
+Route::get('/location/{cityid}', [WeatherController::class, 'location']);
